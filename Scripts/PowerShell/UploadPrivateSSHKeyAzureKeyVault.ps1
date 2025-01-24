@@ -1,5 +1,6 @@
 ﻿ <#
 .History
+   24/10/2024 - 1.1 - Updated script to use the newer Az cmdlets instead of AzureRm
    13/10/2020 - 1.0 - Initial release - David Alzamendi
 .DESCRIPTION
    Uploads a private key to key vault in Base-64 format
@@ -8,10 +9,13 @@
 	None   
 #>
 # Connect to your account
-Connect-AzureRmAccount
+Connect-AzAccount
+
+# Show Azure Subscriptions on tenant
+Get-AzSubscription
 
 # Connect to subscription
-Set-AzureRmContext -SubscriptionId "XXXXX-XXXXX-XXXXX-XXXXX-XXXXX"
+Set-AzContext -Subscription "XXXXX-XXXXX-XXXXX-XXXXX-XXXXX"
 
 # Define variables
 
@@ -23,4 +27,4 @@ $Base64 = [System.Convert]::ToBase64String($PrivateKey)
 $Secret = ConvertTo-SecureString -String $Base64 -AsPlainText -Force
 
 # Upload key to secret
-Set-AzureKeyVaultSecret -VaultName 'KeyVault-Name' -Name 'SecretName' -SecretValue $Secret 
+Set-AzKeyVaultSecret -VaultName 'KeyVault-Name' -Name 'SecretName' -SecretValue $Secret 
